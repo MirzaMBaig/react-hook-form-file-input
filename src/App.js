@@ -1,18 +1,40 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Stack, TextField, PrimaryButton } from "@fluentui/react";
 
 function App() {
-  const { register, handleSubmit } = useForm() 
+  const { register, handleSubmit, control, errors } = useForm();
+
+  useEffect(() => {
+    register({ name: "uploadResource" });
+  }, [register]);
 
   const onSubmit = (data) => {
-    console.log(data)
-  }
+
+    //this has just the file name not any file object to upload to server
+    console.log(data);
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input ref={register} type="file" name="picture" />
-      <button>Submit</button>
-    </form>
+    <Stack>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack>
+          <Controller
+            as={<TextField />}
+            label="Upload Resource"
+            control={control}
+            placeholder="Upload Resource"
+            name="uploadResource"
+            type="file"
+          />
+          {errors.uploadResource && "uploadResource is required"}
+
+          <Stack.Item align={"center"}>
+            <PrimaryButton text="submit" type="submit" checked={true} />
+          </Stack.Item>
+        </Stack>
+      </form>
+    </Stack>
   );
 }
 
